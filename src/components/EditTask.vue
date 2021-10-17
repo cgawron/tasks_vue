@@ -20,7 +20,19 @@
           ></button>
         </div>
         <div class="modal-body">
-          <input type="text" v-model="title" />
+          <div>
+            <label for="title" class="form-label">Title</label>
+            <input class="form-control" type="text" id="title" v-model="title" />
+          </div>
+          <div>
+            <label for="description" class="form-label">Description</label>
+            <textarea
+              class="form-control"
+              type="text"
+              id="description"
+              v-model="description"
+            />
+          </div>
         </div>
         <div class="modal-footer">
           <button class="btn btn-primary" @click="updateTask">Update</button>
@@ -41,6 +53,7 @@ export default {
   data() {
     return {
       title: this.task.title,
+      description: this.task.description,
       modal: null,
     };
   },
@@ -55,6 +68,7 @@ export default {
       this.$emit("update:task", {
         ...this.task,
         title: this.title,
+        description: this.description,
       });
     },
   },
@@ -65,3 +79,16 @@ export default {
   },
 };
 </script>
+
+<style>
+.form-label {
+  display: block;
+  text-align: left;
+  margin-top: 1rem;
+  padding-left: 0.5rem;
+}
+
+input {
+  width: 100%;
+}
+</style>
