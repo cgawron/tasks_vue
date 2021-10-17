@@ -11,27 +11,33 @@
           <p>Tasks newly added in the backlog.</p>
         </div>
       </div>
-      <ul class="list-group task">
-        <li
-          v-for="task in Object.values(tasks).filter(
-            (task) => task.status === lane.status
-          )"
-          :key="task.id"
-          class="list-group-item"
-        >
-          <h4>
-            {{ task.title }}
-            <button
-              type="button"
-              class="btn btn-sm btn-primary pull-right"
-              @click="edit(task)"
-            >
-              <span><FontAwesomeIcon icon="pencil-alt" /></span>
-            </button>
-          </h4>
-          <p>{{ task.description }}</p>
-        </li>
-      </ul>
+      <div class="drop" :data-status="lane.status" @dragover="dragOver" @drop="drop">
+        <ul class="list-group task">
+          <li
+            v-for="task in Object.values(tasks).filter(
+              (task) => task.status === lane.status
+            )"
+            :key="task.id"
+            :data-id="task.id"
+            class="list-group-item"
+            draggable="true"
+            @dragstart="dragStart"
+            @dragend="dragEnd"
+          >
+            <h4>
+              {{ task.title }}
+              <button
+                type="button"
+                class="btn btn-sm btn-primary pull-right"
+                @click="edit(task)"
+              >
+                <span><FontAwesomeIcon icon="pencil-alt" /></span>
+              </button>
+            </h4>
+            <p>{{ task.description }}</p>
+          </li>
+        </ul>
+      </div>
     </div>
     <div v-if="editTask">
       <EditTask :task="editTask" @update:task="updateTask"></EditTask>
@@ -81,6 +87,34 @@ export default {
       console.log(tasks);
       this.$emit("update:tasks", tasks);
     },
+    dragStart(event) {
+      event.dataTransfer.dropEffect = "move";
+      event.dataTransfer.setData("text/plain", event.target.dataset.id);
+      event.currentTarget.classList.add("drag");
+      console.log(event);
+      let taskId = event.dataTransfer.getData("text/plain");
+      console.log("Drop: taskId=%s", taskId);
+    },
+    dragEnd(event) {
+      event.currentTarget.classList.remove("drag");
+      console.log("DrageEnd: %o", event);
+    },
+    dragOver(event) {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+      let taskId = event.dataTransfer.getData("text/plain");
+      console.log("Drop: taskId=%s", taskId);
+    },
+    drop(event) {
+      event.preventDefault();
+      let taskId = event.dataTransfer.getData("text/plain");
+      console.log("Drop: taskId=%s", taskId);
+      let task = this.tasks[taskId];
+      let status = parseInt(event.target.dataset.status);
+      console.log("Drop: status=%s, task=%o", status, task);
+      task.status = status;
+      this.$emit("update:tasks", this.tasks);
+    },
   },
   components: {
     FontAwesomeIcon,
@@ -97,5 +131,14 @@ export default {
 
 .task {
   margin-top: 5px;
+}
+
+.drop {
+  position: relative;
+  height: 100%;
+}
+
+.drag {
+  opacity: 0.5;
 }
 </style>
