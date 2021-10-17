@@ -41,7 +41,9 @@
                   </button>
                 </h4>
               </div>
-              <div class="card-body align-left">{{ task.description }}</div>
+              <div class="card-body align-left">
+                <p>{{ task.description }}</p>
+              </div>
             </div>
           </li>
         </ul>
@@ -161,5 +163,10 @@ export default {
 
 .align-left {
   text-align: left;
+}
+
+.card-header {
+  height: 55px;
+  vertical-align: middle;
 }
 </style>

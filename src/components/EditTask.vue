@@ -44,6 +44,7 @@
 
 <script>
 import { Modal } from "bootstrap/dist/js/bootstrap.esm.min.js";
+
 export default {
   name: "EditTask",
   props: {
