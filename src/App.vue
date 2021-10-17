@@ -1,8 +1,6 @@
 <template>
   <nav class="navbar navbar-dark bg-dark fixed-top" id="nav">
     <span class="navbar-brand">TASKBOARD</span>
-    <router-link to="/">Home</router-link>
-    <router-link to="/">NEW TASK</router-link>
   </nav>
   <Lanes :lanes="lanes" v-model:tasks="tasks" class="main" />
 </template>
