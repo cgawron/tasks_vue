@@ -6,6 +6,14 @@
         <div class="card-header">
           <FontAwesomeIcon :icon="lane.icon" />
           {{ lane.title }}
+          <button
+            v-if="lane.status == 0"
+            type="button"
+            class="btn btn-sm pull-right"
+            @click="addTask()"
+          >
+            <span><FontAwesomeIcon icon="plus" /></span>
+          </button>
         </div>
         <div class="card-body">
           <p>Tasks newly added in the backlog.</p>
@@ -19,22 +27,22 @@
             )"
             :key="task.id"
             :data-id="task.id"
-            class="list-group-item"
+            class="item"
             draggable="true"
             @dragstart="dragStart"
             @dragend="dragEnd"
           >
-            <h4>
-              {{ task.title }}
-              <button
-                type="button"
-                class="btn btn-sm btn-primary pull-right"
-                @click="edit(task)"
-              >
-                <span><FontAwesomeIcon icon="pencil-alt" /></span>
-              </button>
-            </h4>
-            <p>{{ task.description }}</p>
+            <div class="card">
+              <div class="card-header align-left">
+                <h4>
+                  {{ task.title }}
+                  <button type="button" class="btn btn-sm pull-right" @click="edit(task)">
+                    <span><FontAwesomeIcon icon="pencil-alt" /></span>
+                  </button>
+                </h4>
+              </div>
+              <div class="card-body align-left">{{ task.description }}</div>
+            </div>
           </li>
         </ul>
       </div>
@@ -53,11 +61,12 @@ import {
   faHourglassStart,
   faPencilAlt,
   faUser,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import EditTask from "./EditTask.vue";
 
-let icons = [faList, faCheckCircle, faHourglassStart, faPencilAlt, faUser];
+let icons = [faList, faCheckCircle, faHourglassStart, faPencilAlt, faUser, faPlus];
 icons.forEach((icon) => library.add(icon));
 
 export default {
@@ -77,6 +86,15 @@ export default {
       //let tasks = { ...this.tasks };
       this.$emit("update:tasks", this.tasks);
     },
+    addTask() {
+      let task = {
+        id: Date.now(),
+        title: "New task",
+        description: "",
+        status: 0,
+      };
+      this.editTask = task;
+    },
     edit(task) {
       console.log(task);
       this.editTask = task;
@@ -91,29 +109,23 @@ export default {
       event.dataTransfer.dropEffect = "move";
       event.dataTransfer.setData("text/plain", event.target.dataset.id);
       event.currentTarget.classList.add("drag");
-      console.log(event);
-      let taskId = event.dataTransfer.getData("text/plain");
-      console.log("Drop: taskId=%s", taskId);
     },
     dragEnd(event) {
       event.currentTarget.classList.remove("drag");
-      console.log("DrageEnd: %o", event);
     },
     dragOver(event) {
       event.preventDefault();
       event.dataTransfer.dropEffect = "move";
-      let taskId = event.dataTransfer.getData("text/plain");
-      console.log("Drop: taskId=%s", taskId);
     },
     drop(event) {
       event.preventDefault();
       let taskId = event.dataTransfer.getData("text/plain");
-      console.log("Drop: taskId=%s", taskId);
       let task = this.tasks[taskId];
-      let status = parseInt(event.target.dataset.status);
-      console.log("Drop: status=%s, task=%o", status, task);
-      task.status = status;
-      this.$emit("update:tasks", this.tasks);
+      if (event.target.dataset.status) {
+        let status = parseInt(event.target.dataset.status);
+        task.status = status;
+        this.$emit("update:tasks", this.tasks);
+      }
     },
   },
   components: {
@@ -140,5 +152,14 @@ export default {
 
 .drag {
   opacity: 0.5;
+}
+
+.item {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.align-left {
+  text-align: left;
 }
 </style>
