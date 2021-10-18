@@ -61,7 +61,7 @@ export default {
   methods: {
     cancel() {
       this.modal.hide();
-      this.$emit("update:task", this.task);
+      //this.$emit("update:task", this.task);
     },
     updateTask() {
       console.log("update");
