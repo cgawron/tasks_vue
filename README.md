@@ -1,24 +1,7 @@
-# tasks
+# Beispielanwendung zum Modul _Frontend-Frameworks für Webanwendungen_
 
-## Project setup
-```
-npm install
-```
+Diese ToDo-Anwendung ist ein einfache Beispielanwendung, die wir mit verschiedenen Frontend-Frameworks für Webanwendungen entwickeln:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- Vue.js (v3)
+- React
+- Angular
