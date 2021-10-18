@@ -3,7 +3,7 @@
     <div v-for="lane in lanes" :key="lane.id" class="col-md-4 col-xs-12">
       <div class="card">
         <!-- Default panel contents -->
-        <div class="card-header">
+        <div class="card-header" data-test="title">
           <FontAwesomeIcon :icon="lane.icon" />
           {{ lane.title }}
           <button
