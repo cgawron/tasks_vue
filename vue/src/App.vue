@@ -14,6 +14,9 @@ export default {
     lanes() {
       return this.$store.state.lanes;
     },
+    tasks() {
+      return this.$store.state.tasks;
+    },
   },
   components: {
     Lanes,

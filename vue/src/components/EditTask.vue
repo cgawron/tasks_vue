@@ -22,7 +22,7 @@
         <div class="modal-body">
           <div>
             <label for="title" class="form-label">Title</label>
-            <input class="form-control" type="text" id="title" v-model="title" />
+            <input class="form-control" type="text" id="title" v-model="task.title" />
           </div>
           <div>
             <label for="description" class="form-label">Description</label>
@@ -30,7 +30,7 @@
               class="form-control"
               type="text"
               id="description"
-              v-model="description"
+              v-model="task.description"
             />
           </div>
         </div>
@@ -47,36 +47,33 @@ import { Modal } from "bootstrap/dist/js/bootstrap.esm.min.js";
 
 export default {
   name: "EditTask",
-  props: {
-    task: Object,
-  },
-  emits: ["update:task"],
   data() {
     return {
-      title: this.task.title,
-      description: this.task.description,
+      task: {
+        title: "",
+        description: "",
+      },
       modal: null,
     };
   },
   methods: {
     cancel() {
       this.modal.hide();
-      //this.$emit("update:task", this.task);
+    },
+    edit(task) {
+      this.task = task;
+      this.modal.show();
     },
     updateTask() {
-      console.log("update");
       this.modal.hide();
-      this.$emit("update:task", {
+      this.$store.dispatch("updateTask", {
         ...this.task,
-        title: this.title,
-        description: this.description,
       });
     },
   },
   mounted() {
     console.log(this.$refs.dialog);
     this.modal = new Modal(this.$refs.dialog);
-    this.modal.show();
   },
 };
 </script>

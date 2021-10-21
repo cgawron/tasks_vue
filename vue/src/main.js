@@ -5,6 +5,7 @@ import { createStore } from 'vuex'
 import App from './App.vue'
 import 'bootstrap/dist/js/bootstrap.bundle.js'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import { cloneDeep } from 'lodash'
 
 
 const store = createStore({
@@ -62,9 +63,45 @@ const store = createStore({
         },
         addTask(state, task) {
             state.tasks[task.id] = task
+        },
+        updateTask(state, task) {
+            state.tasks[task.id] = task
+        }
+    },
+    actions: {
+        deleteTask(context, task) {
+            console.log("deleteTask: %o", task)
+            context.commit('deleteTask', task.id)
+        },
+        addTask(context, task) {
+            console.log("addTask: %o", task)
+            context.commit('addTask', task)
+        },
+        updateTask(context, task) {
+            console.log("updateTask: %o", task)
+            context.commit('updateTask', task)
         }
     }
 });
+
+function clone(obj) { return cloneDeep(obj) }
+
+store.subscribe((mutation, state) => {
+    console.log("mutation: %o", mutation)
+    console.log("state: %s", JSON.stringify(state))
+    window.history.pushState(clone(state), "")
+})
+
+function handler(event) {
+    console.log("onpopstate: this=%o", this)
+    if (event.state != null) {
+        this.replaceState(clone(event.state))
+        console.log("onpopstate: state=%o", event.state)
+    }
+}
+
+window.onpopstate = handler.bind(store);
+window.history.pushState(clone(store.state), "")
 
 createApp(App)
     .use(store)

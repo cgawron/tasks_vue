@@ -49,9 +49,7 @@
         </ul>
       </div>
     </div>
-    <div v-if="editTask">
-      <EditTask :task="editTask" @update:task="updateTask"></EditTask>
-    </div>
+    <EditTask ref="editor"></EditTask>
   </div>
 </template>
 
@@ -73,21 +71,11 @@ icons.forEach((icon) => library.add(icon));
 
 export default {
   name: "ToDos",
-  data() {
-    return {
-      editTask: null,
-    };
-  },
   props: {
     lanes: Array,
     tasks: Object,
   },
   methods: {
-    nextState(task) {
-      task.status++;
-      //let tasks = { ...this.tasks };
-      this.$emit("update:tasks", this.tasks);
-    },
     addTask() {
       let task = {
         id: Date.now(),
@@ -95,17 +83,13 @@ export default {
         description: "",
         status: 0,
       };
-      this.editTask = task;
+      this.$store.dispatch("addTask", task).then(() => {
+        this.$refs.editor.edit(task);
+      });
     },
     edit(task) {
       console.log(task);
-      this.editTask = task;
-    },
-    updateTask(task) {
-      this.editTask = null;
-      let tasks = { ...this.tasks, [task.id]: task };
-      console.log("Updating tasks: %o", tasks);
-      this.$emit("update:tasks", tasks);
+      this.$refs.editor.edit(task);
     },
     dragStart(event) {
       event.dataTransfer.dropEffect = "move";
@@ -125,8 +109,7 @@ export default {
       let task = this.tasks[taskId];
       if (event.target.dataset.status) {
         let status = parseInt(event.target.dataset.status);
-        task.status = status;
-        this.$emit("update:tasks", this.tasks);
+        this.$store.dispatch("updateTask", { ...task, status });
       }
     },
   },
