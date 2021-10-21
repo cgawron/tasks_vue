@@ -15,8 +15,8 @@
             <span><FontAwesomeIcon icon="plus" /></span>
           </button>
         </div>
-        <div class="card-body">
-          <p>Tasks newly added in the backlog.</p>
+        <div class="card-body" data-test="description">
+          <p>{{ lane.description }}</p>
         </div>
       </div>
       <div class="drop" :data-status="lane.status" @dragover="dragOver" @drop="drop">
@@ -104,7 +104,7 @@ export default {
     updateTask(task) {
       this.editTask = null;
       let tasks = { ...this.tasks, [task.id]: task };
-      console.log(tasks);
+      console.log("Updating tasks: %o", tasks);
       this.$emit("update:tasks", tasks);
     },
     dragStart(event) {
