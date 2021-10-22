@@ -2,6 +2,6 @@
 
 Diese ToDo-Anwendung ist ein einfache Beispielanwendung, die wir mit verschiedenen Frontend-Frameworks für Webanwendungen entwickeln:
 
-- Vue.js (v3)
-- React
-- Angular
+- [x] Vue.js (v3)
+- [ ] React
+- [ ] Angular
