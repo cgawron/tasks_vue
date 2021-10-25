@@ -36,3 +36,13 @@
     transform: rotate(360deg);
   }
 }
+
+#nav {
+  padding: 30px;
+}
+
+.App {
+  position: relative;
+  top: 60px;
+  padding: 60px 30px 0;
+}

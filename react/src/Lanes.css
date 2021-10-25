@@ -1,0 +1,31 @@
+.card-header {
+  height: 55px;
+  vertical-align: middle;
+}
+
+.pull-right {
+  float: right;
+  padding: 1px;
+}
+
+.item {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.task {
+  margin-top: 5px;
+}
+
+.btn.edit {
+  border: none;
+}
+
+.drop {
+  position: relative;
+  height: 100%;
+}
+
+.drag {
+  opacity: 0.5;
+}
