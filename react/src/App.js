@@ -62,6 +62,19 @@ function App(props) {
   const [tasks, setTasks] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
 
+  // ToDo: Get data from backend
+  useEffect(() => {
+    setLanes(data.lanes);
+    setTasks(data.tasks);
+  }, [ data ]);
+
+  function moveTask(taskId, status) {
+    console.log("move task", taskId, status);
+    let newTasks = { ...tasks, [taskId]: { ...tasks[taskId], status: status } }
+    console.log("new tasks", newTasks);
+    setTasks(newTasks);
+  }
+
   function editTask(task) {
     console.log("edit task", task);
     setEditingTask(task);
@@ -73,18 +86,7 @@ function App(props) {
     setTasks({ ...tasks, [task.id]: task });
   }
 
-  function moveTask(taskId, status) {
-    console.log("move task", taskId, status);
-    let newTasks = { ...tasks, [taskId]: { ...tasks[taskId], status: status } }
-    console.log("new tasks", newTasks);
-    setTasks(newTasks);
-  }
-
-  // ToDo: Get data from backend
-  useEffect(() => {
-    setLanes(data.lanes);
-    setTasks(data.tasks);
-  }, []);
+  
 
   return (
     <div className="App">
